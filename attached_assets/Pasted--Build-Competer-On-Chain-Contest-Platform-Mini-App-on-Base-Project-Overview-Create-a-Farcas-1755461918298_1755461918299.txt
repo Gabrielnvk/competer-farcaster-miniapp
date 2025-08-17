@@ -1,0 +1,154 @@
+# Build "Competer" - On-Chain Contest Platform Mini-App on Base
+
+## Project Overview
+Create a Farcaster Mini-App called "Competer" that enables users to create and participate in on-chain contests with automated prize distribution. The app should be built on Base blockchain using OnchainKit, MiniKit, and Coinbase Developer Platform tools.
+
+## Core Features
+
+### 1. Contest Creation System
+- **Contest Types**: Support hackathons, sports betting, online games, IRL sports, creative challenges, prediction markets, and custom competitions
+- **Prize Mechanisms**: 
+  - Winner-takes-all (single winner gets entire pot)
+  - Top 3 distribution (configurable percentages)
+  - Entry fee model where participants pay to join
+  - Sponsor-funded prizes where creator funds the prize pool
+- **Contest Parameters**:
+  - Title, description, and category
+  - Entry deadline and contest duration
+  - Entry fee amount (in ETH/USDC on Base)
+  - Maximum participants limit
+  - Judging criteria and voting mechanism
+
+### 2. Smart Contract Architecture
+- **Contest Factory Contract**: Deploy individual contest contracts
+- **Individual Contest Contracts**: Handle entries, escrow funds, and prize distribution
+- **Security Features**:
+  - Automated escrow system for entry fees and prizes
+  - Time-locked prize release mechanisms
+  - Emergency withdrawal functions
+  - Anti-manipulation safeguards
+
+### 3. User Interface & Experience
+- **Wallet Integration**: Seamless Coinbase Wallet connection using OnchainKit
+- **Contest Discovery**: Browse active, upcoming, and completed contests
+- **Participation Flow**: One-click entry with automatic fee payment
+- **Creator Dashboard**: Manage created contests and track participation
+- **Participant Dashboard**: View entered contests and track performance
+
+## Technical Implementation
+
+### Frontend Stack
+- **Framework**: Next.js 14 with TypeScript
+- **Styling**: Tailwind CSS for responsive design
+- **Blockchain Integration**: 
+  - OnchainKit for wallet connectivity and transactions
+  - MiniKit for Farcaster integration
+  - Coinbase CDP MCP for blockchain operations
+
+### Backend Requirements
+- **API Routes**: Contest CRUD operations, user management, webhook handling
+- **Database**: Store contest metadata, user profiles, and off-chain data
+- **Webhook Integration**: Real-time updates for contest events
+
+### Smart Contracts (Solidity)
+```solidity
+// Key contracts needed:
+- ContestFactory.sol: Deploy and manage contest instances
+- Contest.sol: Individual contest logic with escrow and distribution
+- PrizePool.sol: Handle complex prize distribution mechanisms
+- Governance.sol: Dispute resolution and platform governance
+```
+
+### Configuration Files
+1. **Farcaster Manifest** (`public/.well-known/farcaster.json`):
+```json
+{
+  "frame": {
+    "version": "1",
+    "name": "Competer",
+    "subtitle": "On-Chain Contest Platform",
+    "description": "Create and participate in various contests with automated prize distribution",
+    "iconUrl": "/icon.png",
+    "homeUrl": "/",
+    "primaryCategory": "games",
+    "tags": ["contests", "onchain", "prizes", "competition"]
+  }
+}
+```
+
+2. **OnchainKit Provider Setup**:
+```typescript
+import { OnchainKitProvider } from '@coinbase/onchainkit';
+import { base } from 'wagmi/chains';
+
+<OnchainKitProvider
+  apiKey={process.env.NEXT_PUBLIC_COINBASE_API_KEY}
+  chain={base}
+>
+  <App />
+</OnchainKitProvider>
+```
+
+## Key User Flows
+
+### Contest Creator Flow
+1. Connect wallet using OnchainKit components
+2. Fill contest creation form (type, prize, duration, entry fee)
+3. Deploy contest contract or fund existing prize pool
+4. Share contest link on Farcaster using MiniKit social features
+5. Monitor participation and manage contest lifecycle
+
+### Participant Flow
+1. Discover contests through Farcaster feeds or app browse
+2. View contest details and prize distribution
+3. Pay entry fee through seamless OnchainKit transaction
+4. Receive confirmation and participate in contest
+5. Automatic prize distribution upon contest completion
+
+## Development Phases
+
+### Phase 1: MVP (Core Contest System)
+- Basic contest creation and participation
+- Simple winner-takes-all prize mechanism
+- Essential wallet integration
+- Basic UI for contest management
+
+### Phase 2: Enhanced Features
+- Multiple prize distribution models
+- Contest categories and filtering
+- Social sharing integration
+- Mobile-optimized responsive design
+
+### Phase 3: Advanced Platform
+- Reputation system for creators and participants
+- Advanced judging mechanisms (community voting, oracle integration)
+- Contest templates and recurring contests
+- Analytics dashboard and performance metrics
+
+## Security & Compliance
+- Implement proper access controls and input validation
+- Use established patterns for escrow and fund management
+- Include emergency pause mechanisms
+- Consider regulatory compliance for gambling/contest laws
+- Implement rate limiting and anti-spam measures
+
+## Deployment & Distribution
+- Deploy smart contracts to Base testnet
+- Host frontend on Vercel with proper environment configuration
+- Register with Farcaster Mini-App directory
+- Implement proper monitoring and error tracking
+
+## Success Metrics
+- Number of contests created monthly
+- Total value locked in active contests
+- User retention and engagement rates
+- Transaction volume and platform fees collected
+
+---
+
+**Start by scaffolding the project with:**
+```bash
+npx create-onchain --mini
+```
+
+Then implement the core contest creation smart contract, followed by the frontend integration using OnchainKit components for wallet connectivity and transaction handling. Focus on security and user experience throughout the development process.
