@@ -1,8 +1,18 @@
-# Competer - On-Chain Contest Platform
+# 🏆 Competer - Farcaster Mini-App
 
-## Overview
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/competer-farcaster-miniapp)
 
-Competer is a Farcaster Mini-App that enables users to create and participate in on-chain contests with automated prize distribution. Built on the Base blockchain, the platform supports various contest types including hackathons, sports betting, online games, creative challenges, and prediction markets.
+## 🎯 Overview
+
+Competer is a **Farcaster Mini-App** that enables users to create and participate in on-chain contests with automated prize distribution. Built on the **Base blockchain** using **OnchainKit** and **MiniKit**, the platform supports various contest types including hackathons, sports betting, online games, creative challenges, and prediction markets.
+
+## ✨ Farcaster Integration Features
+
+- 📱 **Native Mini-App**: Runs seamlessly within Farcaster clients
+- 🖼️ **Contest Frames**: Beautiful, shareable contest cards in Farcaster feeds  
+- 📤 **Native Sharing**: One-click sharing of contests on Farcaster
+- 🔐 **Farcaster Auth**: Login with your Farcaster identity (FID-based)
+- ⚡ **Real-time Updates**: Live contest stats and notifications
 
 ## Features
 
@@ -102,7 +112,52 @@ npm run db:push
 npm run dev
 ```
 
-The application will be available at `http://localhost:5000`.
+The application will be available at `http://localhost:3000`.
+
+## 🚀 Deploy to Vercel
+
+### Quick Deploy
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/competer-farcaster-miniapp)
+
+### Manual Deployment
+
+1. **Clone the repository**:
+```bash
+git clone https://github.com/yourusername/competer-farcaster-miniapp.git
+cd competer-farcaster-miniapp
+```
+
+2. **Install dependencies**:
+```bash
+npm install
+```
+
+3. **Deploy to Vercel**:
+```bash
+npx vercel --prod
+```
+
+### Environment Variables
+
+Set these in your Vercel dashboard:
+
+- `DATABASE_URL` - Your PostgreSQL database URL (Supabase/Neon)
+- `NODE_ENV` - Set to `production`
+
+## 📱 Farcaster Mini-App Setup
+
+After deployment:
+
+1. **Update Manifest**: Replace URLs in `public/.well-known/farcaster.json` with your live domain
+2. **Test Frames**: Visit `/api/frames/contest/[id]/image` to test frame generation
+3. **Submit to Farcaster**: Use Farcaster Developer Tools to register your Mini-App
+
+## 🖼️ Frame Endpoints
+
+- `GET /.well-known/farcaster.json` - Farcaster manifest
+- `GET /api/frames/contest/:id/image` - Contest frame image
+- `POST /api/frames/contest/:id/join` - Join contest action
+- `POST /api/webhooks/farcaster` - Farcaster webhook handler
 
 ## Database Schema
 
