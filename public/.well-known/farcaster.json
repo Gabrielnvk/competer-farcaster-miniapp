@@ -9,22 +9,22 @@
     "name": "Competer",
     "subtitle": "On-Chain Contest Platform",
     "description": "Create and participate in various contests with automated prize distribution on Base blockchain",
-    "iconUrl": "/icon.png",
-    "homeUrl": "/",
+    "iconUrl": "https://competer-farcaster-miniapp-9zcfeo26y-gabriel-novaks-projects.vercel.app/icon.png",
+    "homeUrl": "https://competer-farcaster-miniapp-9zcfeo26y-gabriel-novaks-projects.vercel.app",
     "primaryCategory": "games",
     "tags": ["contests", "onchain", "prizes", "competition", "base", "ethereum"],
-    "splashImageUrl": "/splash.png",
+    "splashImageUrl": "https://competer-farcaster-miniapp-9zcfeo26y-gabriel-novaks-projects.vercel.app/splash.png",
     "splashBackgroundColor": "#1a1a1a",
-    "heroImageUrl": "/hero.png",
+    "heroImageUrl": "https://competer-farcaster-miniapp-9zcfeo26y-gabriel-novaks-projects.vercel.app/hero.png",
     "tagline": "Compete. Win. Earn.",
     "screenshotUrls": [
-      "/screenshot1.png",
-      "/screenshot2.png"
+      "https://competer-farcaster-miniapp-9zcfeo26y-gabriel-novaks-projects.vercel.app/screenshot1.png",
+      "https://competer-farcaster-miniapp-9zcfeo26y-gabriel-novaks-projects.vercel.app/screenshot2.png"
     ]
   },
   "webhooks": [
     {
-      "url": "/api/webhooks/farcaster",
+      "url": "https://competer-farcaster-miniapp-9zcfeo26y-gabriel-novaks-projects.vercel.app/api/webhooks/farcaster",
       "method": "POST"
     }
   ]
