@@ -1,6 +1,6 @@
 # 🏆 Competer - Farcaster Mini-App
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/competer-farcaster-miniapp)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Gabrielnvk/competer-farcaster-miniapp)
 
 ## 🎯 Overview
 
@@ -117,13 +117,13 @@ The application will be available at `http://localhost:3000`.
 ## 🚀 Deploy to Vercel
 
 ### Quick Deploy
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/competer-farcaster-miniapp)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Gabrielnvk/competer-farcaster-miniapp)
 
 ### Manual Deployment
 
 1. **Clone the repository**:
 ```bash
-git clone https://github.com/yourusername/competer-farcaster-miniapp.git
+git clone https://github.com/Gabrielnvk/competer-farcaster-miniapp.git
 cd competer-farcaster-miniapp
 ```
 
