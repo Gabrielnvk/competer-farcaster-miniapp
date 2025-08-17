@@ -4,6 +4,8 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { OnchainKitProvider } from "./lib/onchain-kit";
+import { useEffect } from "react";
+import { sdk } from "@farcaster/miniapp-sdk";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import Home from "@/pages/home";
@@ -29,6 +31,25 @@ function Router() {
 }
 
 function App() {
+  useEffect(() => {
+    // Initialize Farcaster Mini-App SDK
+    const initFarcaster = async () => {
+      try {
+        // Wait for app to be fully loaded
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Signal to Farcaster that the app is ready
+        await sdk.actions.ready();
+        
+        console.log('🎯 Farcaster Mini-App initialized successfully');
+      } catch (error) {
+        console.log('⚠️ Not running in Farcaster environment:', error);
+      }
+    };
+
+    initFarcaster();
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <OnchainKitProvider>

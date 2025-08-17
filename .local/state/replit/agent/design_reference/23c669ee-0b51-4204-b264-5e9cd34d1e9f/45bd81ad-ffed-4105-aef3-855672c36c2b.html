@@ -1,0 +1,797 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Competer - On-Chain Contest Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/heroicons@2.0.16/24/outline/index.js" type="module"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#1E293B',
+                        'primary-light': '#334155',
+                        'secondary': '#6366F1',
+                        'accent': '#F59E0B',
+                        'success': '#10B981',
+                        'danger': '#EF4444',
+                        'dark': '#0F172A',
+                        'card': '#F8FAFC',
+                    }
+                }
+            }
+        };
+    </script>
+</head>
+<body class="font-inter bg-dark text-white min-h-screen">
+    
+    <!-- @COMPONENT: Header [wallet connection, navigation] -->
+    <header class="bg-primary border-b border-primary-light sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-8">
+                    <!-- Logo -->
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-gradient-to-r from-secondary to-accent rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">C</span>
+                        </div>
+                        <span class="text-xl font-bold text-white">Competer</span>
+                    </div>
+                    
+                    <!-- Navigation -->
+                    <nav class="hidden md:flex space-x-6">
+                        <a href="#" class="text-white hover:text-accent transition-colors font-medium">Discover</a>
+                        <a href="#" class="text-gray-300 hover:text-accent transition-colors font-medium">Create</a>
+                        <a href="#" class="text-gray-300 hover:text-accent transition-colors font-medium">My Contests</a>
+                        <a href="#" class="text-gray-300 hover:text-accent transition-colors font-medium">Leaderboard</a>
+                    </nav>
+                </div>
+                
+                <!-- Wallet Connection -->
+                <div class="flex items-center space-x-4">
+                    <div class="hidden sm:flex items-center space-x-2 bg-primary-light px-4 py-2 rounded-lg">
+                        <div class="w-2 h-2 bg-success rounded-full"></div>
+                        <span class="text-sm text-gray-300">Base Network</span>
+                    </div>
+                    <button class="bg-gradient-to-r from-secondary to-accent px-6 py-2 rounded-lg font-medium text-white hover:shadow-lg transition-all duration-200">
+                        <span data-bind="wallet.isConnected ? wallet.address : 'Connect Wallet'">Connect Wallet</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- @END_COMPONENT: Header -->
+
+    <!-- @COMPONENT: HeroSection [featured contests, stats] -->
+    <section class="bg-gradient-to-r from-primary via-secondary to-accent py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
+                Win Big in <span class="text-accent">On-Chain</span> Contests
+            </h1>
+            <p class="text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
+                Create and participate in decentralized contests with automated prize distribution on Base blockchain
+            </p>
+            
+            <!-- Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6">
+                    <div class="text-3xl font-bold text-accent" data-bind="stats.totalPrizes">$127K</div>
+                    <div class="text-sm text-gray-200">Total Prizes</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6">
+                    <div class="text-3xl font-bold text-success" data-bind="stats.activeContests">43</div>
+                    <div class="text-sm text-gray-200">Active Contests</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6">
+                    <div class="text-3xl font-bold text-white" data-bind="stats.totalParticipants">2.1K</div>
+                    <div class="text-sm text-gray-200">Participants</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6">
+                    <div class="text-3xl font-bold text-accent" data-bind="stats.contestsCompleted">89</div>
+                    <div class="text-sm text-gray-200">Completed</div>
+                </div>
+            </div>
+            
+            <!-- CTA Buttons -->
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <button class="bg-accent hover:bg-accent/90 text-primary font-bold py-4 px-8 rounded-lg transition-all duration-200 transform hover:scale-105">
+                    Explore Contests
+                </button>
+                <button class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-4 px-8 rounded-lg transition-all duration-200">
+                    Create Contest
+                </button>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: HeroSection -->
+
+    <!-- @COMPONENT: MainContent [contest discovery and filtering] -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        
+        <!-- Contest Filters -->
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 space-y-4 lg:space-y-0">
+            <div>
+                <h2 class="text-3xl font-bold text-white mb-2">Active Contests</h2>
+                <p class="text-gray-400">Join ongoing competitions and win prizes</p>
+            </div>
+            
+            <!-- Filter Controls -->
+            <div class="flex flex-wrap gap-4">
+                <select class="bg-primary border border-primary-light text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-secondary outline-none">
+                    <option>All Categories</option>
+                    <option>Hackathons</option>
+                    <option>Gaming</option>
+                    <option>Sports Betting</option>
+                    <option>Creative</option>
+                    <option>Prediction Markets</option>
+                </select>
+                
+                <select class="bg-primary border border-primary-light text-white px-4 py-2 rounded-lg focus:ring-2 focus:ring-secondary outline-none">
+                    <option>Prize Amount</option>
+                    <option>$0 - $100</option>
+                    <option>$100 - $1K</option>
+                    <option>$1K - $10K</option>
+                    <option>$10K+</option>
+                </select>
+                
+                <div class="flex items-center space-x-2 bg-primary px-4 py-2 rounded-lg border border-primary-light">
+                    <input type="checkbox" id="freeEntry" class="text-secondary focus:ring-secondary">
+                    <label for="freeEntry" class="text-white text-sm">Free Entry</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contest Grid -->
+        <!-- @MAP: contests.filter(contest => contest.status === 'active').map(contest => ( -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            
+            <!-- @COMPONENT: ContestCard [individual contest display] -->
+            <!-- Featured Contest -->
+            <div class="bg-gradient-to-br from-secondary to-accent p-1 rounded-xl">
+                <div class="bg-card text-primary p-6 rounded-lg h-full">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="bg-accent text-white text-xs font-bold px-3 py-1 rounded-full">FEATURED</span>
+                        <span class="text-success font-semibold text-sm" data-bind="contest.timeRemaining">2d 14h left</span>
+                    </div>
+                    
+                    <h3 class="text-xl font-bold mb-2" data-bind="contest.title">AI Art Generation Challenge</h3>
+                    <p class="text-gray-600 text-sm mb-4" data-bind="contest.description">Create the most innovative AI-generated artwork using any tools. Judged by community voting.</p>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-accent" data-bind="contest.prizePool">$5,000</div>
+                            <div class="text-xs text-gray-500">Prize Pool</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-secondary" data-bind="contest.participants">127</div>
+                            <div class="text-xs text-gray-500">Participants</div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between items-center mb-4 text-sm">
+                        <span class="text-gray-600">Entry Fee: <span class="font-semibold text-primary" data-bind="contest.entryFee">0.01 ETH</span></span>
+                        <span class="text-gray-600">Max: <span data-bind="contest.maxParticipants">500</span></span>
+                    </div>
+                    
+                    <button class="w-full bg-gradient-to-r from-secondary to-accent text-white font-bold py-3 rounded-lg hover:shadow-lg transition-all duration-200 transform hover:scale-105" data-event="click:joinContest">
+                        Join Contest
+                    </button>
+                </div>
+            </div>
+
+            <!-- Regular Contest Cards -->
+            <div class="bg-card text-primary p-6 rounded-xl hover:shadow-lg transition-all duration-200">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="bg-success text-white text-xs font-bold px-3 py-1 rounded-full">ACTIVE</span>
+                    <span class="text-success font-semibold text-sm" data-bind="contest.timeRemaining">5d 8h left</span>
+                </div>
+                
+                <h3 class="text-xl font-bold mb-2" data-bind="contest.title">DeFi Protocol Hackathon</h3>
+                <p class="text-gray-600 text-sm mb-4" data-bind="contest.description">Build the next revolutionary DeFi protocol. Winners determined by technical innovation and judges' scores.</p>
+                
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-accent" data-bind="contest.prizePool">$15,000</div>
+                        <div class="text-xs text-gray-500">Prize Pool</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-secondary" data-bind="contest.participants">89</div>
+                        <div class="text-xs text-gray-500">Participants</div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between items-center mb-4 text-sm">
+                    <span class="text-gray-600">Entry Fee: <span class="font-semibold text-success">FREE</span></span>
+                    <span class="text-gray-600">Max: <span data-bind="contest.maxParticipants">200</span></span>
+                </div>
+                
+                <button class="w-full bg-secondary hover:bg-secondary/90 text-white font-bold py-3 rounded-lg transition-all duration-200" data-event="click:joinContest">
+                    Join Contest
+                </button>
+            </div>
+
+            <div class="bg-card text-primary p-6 rounded-xl hover:shadow-lg transition-all duration-200">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="bg-accent text-white text-xs font-bold px-3 py-1 rounded-full">HOT</span>
+                    <span class="text-danger font-semibold text-sm" data-bind="contest.timeRemaining">12h left</span>
+                </div>
+                
+                <h3 class="text-xl font-bold mb-2" data-bind="contest.title">NBA Finals Prediction</h3>
+                <p class="text-gray-600 text-sm mb-4" data-bind="contest.description">Predict the winner of tonight's NBA Finals game. Winner takes all the prize pool.</p>
+                
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-accent" data-bind="contest.prizePool">$2,450</div>
+                        <div class="text-xs text-gray-500">Prize Pool</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-secondary" data-bind="contest.participants">203</div>
+                        <div class="text-xs text-gray-500">Participants</div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between items-center mb-4 text-sm">
+                    <span class="text-gray-600">Entry Fee: <span class="font-semibold text-primary" data-bind="contest.entryFee">$15</span></span>
+                    <span class="text-gray-600">Max: <span data-bind="contest.maxParticipants">1000</span></span>
+                </div>
+                
+                <button class="w-full bg-danger hover:bg-danger/90 text-white font-bold py-3 rounded-lg transition-all duration-200" data-event="click:joinContest">
+                    Join Contest
+                </button>
+            </div>
+
+            <div class="bg-card text-primary p-6 rounded-xl hover:shadow-lg transition-all duration-200">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="bg-success text-white text-xs font-bold px-3 py-1 rounded-full">ACTIVE</span>
+                    <span class="text-success font-semibold text-sm" data-bind="contest.timeRemaining">3d 2h left</span>
+                </div>
+                
+                <h3 class="text-xl font-bold mb-2" data-bind="contest.title">Logo Design Contest</h3>
+                <p class="text-gray-600 text-sm mb-4" data-bind="contest.description">Design a logo for a new Web3 startup. Community voting determines the winner.</p>
+                
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-accent" data-bind="contest.prizePool">$800</div>
+                        <div class="text-xs text-gray-500">Prize Pool</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-secondary" data-bind="contest.participants">34</div>
+                        <div class="text-xs text-gray-500">Participants</div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between items-center mb-4 text-sm">
+                    <span class="text-gray-600">Entry Fee: <span class="font-semibold text-primary" data-bind="contest.entryFee">$10</span></span>
+                    <span class="text-gray-600">Max: <span data-bind="contest.maxParticipants">100</span></span>
+                </div>
+                
+                <button class="w-full bg-secondary hover:bg-secondary/90 text-white font-bold py-3 rounded-lg transition-all duration-200" data-event="click:joinContest">
+                    Join Contest
+                </button>
+            </div>
+
+            <div class="bg-card text-primary p-6 rounded-xl hover:shadow-lg transition-all duration-200">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="bg-accent text-white text-xs font-bold px-3 py-1 rounded-full">GAMING</span>
+                    <span class="text-success font-semibold text-sm" data-bind="contest.timeRemaining">1d 18h left</span>
+                </div>
+                
+                <h3 class="text-xl font-bold mb-2" data-bind="contest.title">Chess Tournament</h3>
+                <p class="text-gray-600 text-sm mb-4" data-bind="contest.description">Online chess tournament with Swiss system format. Top 3 players split the prize pool.</p>
+                
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-accent" data-bind="contest.prizePool">$1,200</div>
+                        <div class="text-xs text-gray-500">Prize Pool</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-secondary" data-bind="contest.participants">67</div>
+                        <div class="text-xs text-gray-500">Participants</div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between items-center mb-4 text-sm">
+                    <span class="text-gray-600">Entry Fee: <span class="font-semibold text-primary" data-bind="contest.entryFee">$20</span></span>
+                    <span class="text-gray-600">Max: <span data-bind="contest.maxParticipants">128</span></span>
+                </div>
+                
+                <button class="w-full bg-secondary hover:bg-secondary/90 text-white font-bold py-3 rounded-lg transition-all duration-200" data-event="click:joinContest">
+                    Join Contest
+                </button>
+            </div>
+
+            <div class="bg-card text-primary p-6 rounded-xl hover:shadow-lg transition-all duration-200">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="bg-secondary text-white text-xs font-bold px-3 py-1 rounded-full">UPCOMING</span>
+                    <span class="text-gray-500 font-semibold text-sm" data-bind="contest.startTime">Starts in 6h</span>
+                </div>
+                
+                <h3 class="text-xl font-bold mb-2" data-bind="contest.title">Crypto Trading Competition</h3>
+                <p class="text-gray-600 text-sm mb-4" data-bind="contest.description">Paper trading competition with virtual $10K starting balance. Best returns win real prizes.</p>
+                
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-accent" data-bind="contest.prizePool">$3,000</div>
+                        <div class="text-xs text-gray-500">Prize Pool</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-secondary" data-bind="contest.participants">12</div>
+                        <div class="text-xs text-gray-500">Participants</div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between items-center mb-4 text-sm">
+                    <span class="text-gray-600">Entry Fee: <span class="font-semibold text-primary" data-bind="contest.entryFee">$50</span></span>
+                    <span class="text-gray-600">Max: <span data-bind="contest.maxParticipants">50</span></span>
+                </div>
+                
+                <button class="w-full bg-gray-400 text-white font-bold py-3 rounded-lg cursor-not-allowed" disabled>
+                    Register for Contest
+                </button>
+            </div>
+            <!-- @END_COMPONENT: ContestCard -->
+        </div>
+        <!-- @END_MAP )) -->
+
+        <!-- Contest Creation Section -->
+        <!-- @COMPONENT: ContestCreation [form for creating new contests] -->
+        <section class="bg-gradient-to-r from-primary to-secondary p-8 rounded-xl mb-12">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-white mb-4">Create Your Own Contest</h2>
+                    <p class="text-gray-200">Launch a contest, set the rules, and let the community compete for prizes</p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Contest Form -->
+                    <div class="bg-white/10 backdrop-blur-sm p-6 rounded-lg">
+                        <form class="space-y-6">
+                            <!-- @STATE: contestForm:object = {} -->
+                            <div>
+                                <label class="block text-white font-semibold mb-2">Contest Title</label>
+                                <input type="text" placeholder="Enter contest title..." class="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:ring-2 focus:ring-accent outline-none" data-bind="contestForm.title">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-white font-semibold mb-2">Description</label>
+                                <textarea rows="3" placeholder="Describe your contest..." class="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:ring-2 focus:ring-accent outline-none resize-none" data-bind="contestForm.description"></textarea>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-white font-semibold mb-2">Category</label>
+                                    <select class="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white focus:ring-2 focus:ring-accent outline-none" data-bind="contestForm.category">
+                                        <option value="">Select category</option>
+                                        <option value="hackathon">Hackathon</option>
+                                        <option value="gaming">Gaming</option>
+                                        <option value="sports">Sports</option>
+                                        <option value="creative">Creative</option>
+                                        <option value="prediction">Prediction</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-white font-semibold mb-2">Duration (days)</label>
+                                    <input type="number" min="1" max="30" placeholder="7" class="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:ring-2 focus:ring-accent outline-none" data-bind="contestForm.duration">
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-white font-semibold mb-2">Entry Fee (ETH)</label>
+                                    <input type="number" step="0.001" min="0" placeholder="0.01" class="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:ring-2 focus:ring-accent outline-none" data-bind="contestForm.entryFee">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-white font-semibold mb-2">Max Participants</label>
+                                    <input type="number" min="2" placeholder="100" class="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:ring-2 focus:ring-accent outline-none" data-bind="contestForm.maxParticipants">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-white font-semibold mb-2">Prize Distribution</label>
+                                <div class="space-y-2">
+                                    <label class="flex items-center space-x-3">
+                                        <input type="radio" name="prizeType" value="winner-takes-all" class="text-accent focus:ring-accent" data-bind="contestForm.prizeType">
+                                        <span class="text-white">Winner Takes All</span>
+                                    </label>
+                                    <label class="flex items-center space-x-3">
+                                        <input type="radio" name="prizeType" value="top-three" class="text-accent focus:ring-accent" data-bind="contestForm.prizeType">
+                                        <span class="text-white">Top 3 Split (50% / 30% / 20%)</span>
+                                    </label>
+                                    <label class="flex items-center space-x-3">
+                                        <input type="radio" name="prizeType" value="sponsor-funded" class="text-accent focus:ring-accent" data-bind="contestForm.prizeType">
+                                        <span class="text-white">Sponsor Funded Prize Pool</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Preview and Submit -->
+                    <div class="bg-white/10 backdrop-blur-sm p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-white mb-4">Contest Preview</h3>
+                        
+                        <div class="bg-card text-primary p-6 rounded-lg mb-6">
+                            <h4 class="text-lg font-bold mb-2" data-bind="contestForm.title || 'Contest Title'">Your Contest Title</h4>
+                            <p class="text-gray-600 text-sm mb-4" data-bind="contestForm.description || 'Contest description will appear here'">Contest description will appear here</p>
+                            
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div class="text-center">
+                                    <div class="text-xl font-bold text-accent" data-bind="calculatePrizePool()">$0</div>
+                                    <div class="text-xs text-gray-500">Estimated Prize</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-xl font-bold text-secondary" data-bind="contestForm.maxParticipants || '0'">0</div>
+                                    <div class="text-xs text-gray-500">Max Participants</div>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center text-sm text-gray-600">
+                                Entry Fee: <span class="font-semibold" data-bind="contestForm.entryFee ? contestForm.entryFee + ' ETH' : 'FREE'">FREE</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Cost Breakdown -->
+                        <div class="bg-dark/30 p-4 rounded-lg mb-6">
+                            <h4 class="text-white font-semibold mb-3">Creation Costs</h4>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between text-gray-300">
+                                    <span>Smart Contract Deployment</span>
+                                    <span>~$2.50</span>
+                                </div>
+                                <div class="flex justify-between text-gray-300">
+                                    <span>Platform Fee (2%)</span>
+                                    <span data-bind="calculatePlatformFee()">$0.00</span>
+                                </div>
+                                <div class="border-t border-gray-600 pt-2 flex justify-between text-white font-semibold">
+                                    <span>Total</span>
+                                    <span data-bind="calculateTotalCost()">~$2.50</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="w-full bg-gradient-to-r from-accent to-orange-500 text-white font-bold py-4 rounded-lg hover:shadow-lg transition-all duration-200 transform hover:scale-105" data-event="click:createContest" data-implementation="Should validate form and deploy smart contract">
+                            Deploy Contest Contract
+                        </button>
+                        
+                        <p class="text-gray-300 text-xs mt-4 text-center">
+                            By creating a contest, you agree to our Terms of Service and accept responsibility for prize distribution.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: ContestCreation -->
+
+        <!-- User Dashboard Section -->
+        <!-- @COMPONENT: UserDashboard [my contests, entered contests] -->
+        <section class="mb-12">
+            <div class="flex flex-col lg:flex-row gap-8">
+                
+                <!-- My Created Contests -->
+                <div class="lg:w-1/2">
+                    <h3 class="text-2xl font-bold text-white mb-6">My Created Contests</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-card p-6 rounded-lg border-l-4 border-l-accent">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h4 class="text-lg font-bold text-primary" data-bind="createdContest.title">Web3 UX Design Challenge</h4>
+                                    <p class="text-gray-600 text-sm" data-bind="createdContest.status">Active • 2 days remaining</p>
+                                </div>
+                                <span class="bg-success text-white text-xs px-2 py-1 rounded">ACTIVE</span>
+                            </div>
+                            
+                            <div class="grid grid-cols-3 gap-4 mb-4">
+                                <div class="text-center">
+                                    <div class="text-lg font-bold text-accent" data-bind="createdContest.prizePool">$1,500</div>
+                                    <div class="text-xs text-gray-500">Prize Pool</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-lg font-bold text-secondary" data-bind="createdContest.participants">23</div>
+                                    <div class="text-xs text-gray-500">Participants</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-lg font-bold text-primary" data-bind="createdContest.submissions">18</div>
+                                    <div class="text-xs text-gray-500">Submissions</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex space-x-3">
+                                <button class="flex-1 bg-secondary text-white py-2 px-4 rounded font-medium hover:bg-secondary/90 transition-colors" data-event="click:manageContest">
+                                    Manage Contest
+                                </button>
+                                <button class="flex-1 bg-gray-200 text-primary py-2 px-4 rounded font-medium hover:bg-gray-300 transition-colors" data-event="click:viewSubmissions">
+                                    View Submissions
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-card p-6 rounded-lg border-l-4 border-l-gray-400">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h4 class="text-lg font-bold text-primary" data-bind="createdContest.title">Trading Bot Contest</h4>
+                                    <p class="text-gray-600 text-sm" data-bind="createdContest.status">Completed • Winners selected</p>
+                                </div>
+                                <span class="bg-gray-500 text-white text-xs px-2 py-1 rounded">COMPLETED</span>
+                            </div>
+                            
+                            <div class="grid grid-cols-3 gap-4 mb-4">
+                                <div class="text-center">
+                                    <div class="text-lg font-bold text-accent" data-bind="createdContest.prizePool">$3,000</div>
+                                    <div class="text-xs text-gray-500">Prize Pool</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-lg font-bold text-secondary" data-bind="createdContest.participants">47</div>
+                                    <div class="text-xs text-gray-500">Participants</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-lg font-bold text-success" data-bind="createdContest.winners">3</div>
+                                    <div class="text-xs text-gray-500">Winners</div>
+                                </div>
+                            </div>
+                            
+                            <button class="w-full bg-gray-200 text-primary py-2 px-4 rounded font-medium hover:bg-gray-300 transition-colors" data-event="click:viewResults">
+                                View Results
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- My Entered Contests -->
+                <div class="lg:w-1/2">
+                    <h3 class="text-2xl font-bold text-white mb-6">My Entered Contests</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-card p-6 rounded-lg border-l-4 border-l-success">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h4 class="text-lg font-bold text-primary" data-bind="enteredContest.title">AI Art Generation Challenge</h4>
+                                    <p class="text-gray-600 text-sm" data-bind="enteredContest.position">Currently #3 of 127 participants</p>
+                                </div>
+                                <span class="bg-success text-white text-xs px-2 py-1 rounded">LEADING</span>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div class="text-center">
+                                    <div class="text-lg font-bold text-accent" data-bind="enteredContest.potentialWinning">$5,000</div>
+                                    <div class="text-xs text-gray-500">Potential Winning</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-lg font-bold text-secondary" data-bind="enteredContest.timeLeft">2d 14h</div>
+                                    <div class="text-xs text-gray-500">Time Left</div>
+                                </div>
+                            </div>
+                            
+                            <button class="w-full bg-success text-white py-2 px-4 rounded font-medium hover:bg-success/90 transition-colors" data-event="click:viewContest">
+                                View Contest
+                            </button>
+                        </div>
+
+                        <div class="bg-card p-6 rounded-lg border-l-4 border-l-accent">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h4 class="text-lg font-bold text-primary" data-bind="enteredContest.title">Chess Tournament</h4>
+                                    <p class="text-gray-600 text-sm" data-bind="enteredContest.position">Round 3 • Next match in 4h</p>
+                                </div>
+                                <span class="bg-accent text-white text-xs px-2 py-1 rounded">IN PROGRESS</span>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div class="text-center">
+                                    <div class="text-lg font-bold text-accent" data-bind="enteredContest.potentialWinning">$400</div>
+                                    <div class="text-xs text-gray-500">Potential Winning</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-lg font-bold text-primary" data-bind="enteredContest.score">6/9</div>
+                                    <div class="text-xs text-gray-500">Current Score</div>
+                                </div>
+                            </div>
+                            
+                            <button class="w-full bg-accent text-white py-2 px-4 rounded font-medium hover:bg-accent/90 transition-colors" data-event="click:continueGame">
+                                Continue Playing
+                            </button>
+                        </div>
+
+                        <div class="bg-card p-6 rounded-lg border-l-4 border-l-gray-400">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h4 class="text-lg font-bold text-primary" data-bind="enteredContest.title">Logo Design Contest</h4>
+                                    <p class="text-gray-600 text-sm" data-bind="enteredContest.result">Finished 2nd place • Prize awarded</p>
+                                </div>
+                                <span class="bg-gray-500 text-white text-xs px-2 py-1 rounded">COMPLETED</span>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div class="text-center">
+                                    <div class="text-lg font-bold text-success" data-bind="enteredContest.winnings">$240</div>
+                                    <div class="text-xs text-gray-500">Winnings</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-lg font-bold text-secondary" data-bind="enteredContest.rank">2nd</div>
+                                    <div class="text-xs text-gray-500">Final Rank</div>
+                                </div>
+                            </div>
+                            
+                            <button class="w-full bg-gray-200 text-primary py-2 px-4 rounded font-medium hover:bg-gray-300 transition-colors" data-event="click:viewResults">
+                                View Results
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: UserDashboard -->
+        
+    </main>
+    <!-- @END_COMPONENT: MainContent -->
+
+    <!-- @COMPONENT: Footer [links, social media] -->
+    <footer class="bg-primary border-t border-primary-light mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                
+                <!-- Company Info -->
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-8 h-8 bg-gradient-to-r from-secondary to-accent rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">C</span>
+                        </div>
+                        <span class="text-xl font-bold text-white">Competer</span>
+                    </div>
+                    <p class="text-gray-300 mb-4 max-w-md">
+                        The premier on-chain contest platform built on Base. Create, participate, and win in decentralized competitions with automated prize distribution.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-accent transition-colors">
+                            <span class="sr-only">Twitter</span>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-accent transition-colors">
+                            <span class="sr-only">Discord</span>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M16.942 4.556a14.85 14.85 0 0 0-3.657-1.136.055.055 0 0 0-.059.027 10.35 10.35 0 0 0-.456.938 13.702 13.702 0 0 0-4.115 0 9.479 9.479 0 0 0-.464-.938.058.058 0 0 0-.058-.027c-1.266.218-2.497.6-3.658 1.136a.052.052 0 0 0-.024.02C.356 8.024-.213 11.424.066 14.782a.062.062 0 0 0 .023.043 14.923 14.923 0 0 0 4.494 2.272.055.055 0 0 0 .059-.02 10.66 10.66 0 0 0 .92-1.496.057.057 0 0 0-.032-.08 9.83 9.83 0 0 1-1.404-.669.058.058 0 0 1-.029-.049.058.058 0 0 1 .023-.05 6.68 6.68 0 0 0 .281-.22.056.056 0 0 1 .058-.008c2.946 1.345 6.135 1.345 9.046 0a.056.056 0 0 1 .059.007 6.593 6.593 0 0 0 .28.221.058.058 0 0 1 .024.05.058.058 0 0 1-.028.049 9.224 9.224 0 0 1-1.405.669.058.058 0 0 0-.033.033.056.056 0 0 0 .002.047c.27.523.578 1.015.919 1.496a.055.055 0 0 0 .059.021 14.875 14.875 0 0 0 4.503-2.272.055.055 0 0 0 .023-.043c.332-3.884-.559-7.26-2.365-10.246a.046.046 0 0 0-.024-.02z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-accent transition-colors">
+                            <span class="sr-only">GitHub</span>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z" clipRule="evenodd"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-white font-semibold mb-4">Platform</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-accent transition-colors">Discover Contests</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-accent transition-colors">Create Contest</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-accent transition-colors">Leaderboard</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-accent transition-colors">How It Works</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Support -->
+                <div>
+                    <h3 class="text-white font-semibold mb-4">Support</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-accent transition-colors">Documentation</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-accent transition-colors">Smart Contracts</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-accent transition-colors">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-accent transition-colors">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-primary-light mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm">© 2024 Competer. Built on Base blockchain with ❤️</p>
+                <div class="flex items-center space-x-4 mt-4 md:mt-0">
+                    <span class="text-sm text-gray-400">Powered by</span>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-6 h-6 bg-blue-500 rounded-full"></div>
+                        <span class="text-sm text-white font-medium">Base</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-6 h-6 bg-purple-500 rounded-full"></div>
+                        <span class="text-sm text-white font-medium">OnchainKit</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- @END_COMPONENT: Footer -->
+
+    <!-- Mobile Navigation Menu (Hidden by default) -->
+    <!-- @STATE: mobileMenuOpen:boolean = false -->
+    <div class="fixed inset-0 z-50 lg:hidden hidden" id="mobile-menu">
+        <div class="fixed inset-0 bg-dark/50 backdrop-blur-sm" data-event="click:closeMobileMenu"></div>
+        <div class="fixed right-0 top-0 h-full w-64 bg-primary shadow-xl transform translate-x-full transition-transform duration-300">
+            <div class="p-6">
+                <button class="absolute top-4 right-4 text-white" data-event="click:closeMobileMenu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+                
+                <nav class="mt-8 space-y-4">
+                    <a href="#" class="block text-white hover:text-accent transition-colors font-medium py-2">Discover</a>
+                    <a href="#" class="block text-white hover:text-accent transition-colors font-medium py-2">Create</a>
+                    <a href="#" class="block text-white hover:text-accent transition-colors font-medium py-2">My Contests</a>
+                    <a href="#" class="block text-white hover:text-accent transition-colors font-medium py-2">Leaderboard</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // TODO: Implement business logic, API calls, and state management
+        (function() {
+            // Basic UI interactions - no business logic
+            const contestCards = document.querySelectorAll('[data-event="click:joinContest"]');
+            const createContestBtn = document.querySelector('[data-event="click:createContest"]');
+            
+            // Placeholder functions for UI feedback only
+            function showToast(message, type = 'info') {
+                // TODO: Implement toast notifications
+                console.log(`${type.toUpperCase()}: ${message}`);
+            }
+            
+            function updateWalletStatus() {
+                // TODO: Implement actual wallet connection status
+                console.log('Updating wallet connection status...');
+            }
+            
+            // UI-only event handlers
+            contestCards.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // TODO: Implement actual contest joining logic with smart contract interaction
+                    showToast('Contest joining functionality would be implemented here', 'info');
+                });
+            });
+            
+            if (createContestBtn) {
+                createContestBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // TODO: Implement contest creation with smart contract deployment
+                    showToast('Contest creation functionality would be implemented here', 'info');
+                });
+            }
+            
+            // Form preview updates (UI only)
+            const formInputs = document.querySelectorAll('input, select, textarea');
+            formInputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    // TODO: Implement real-time form preview updates
+                    console.log('Form preview would update here');
+                });
+            });
+            
+            // Mobile menu toggle
+            const mobileMenuToggle = document.querySelector('[data-event="click:toggleMobileMenu"]');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (mobileMenuToggle && mobileMenu) {
+                mobileMenuToggle.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+            
+            // Initialize UI
+            updateWalletStatus();
+        })();
+    </script>
+</body>
+</html>

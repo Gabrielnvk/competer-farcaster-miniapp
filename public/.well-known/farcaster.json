@@ -1,4 +1,9 @@
 {
+  "accountAssociation": {
+    "header": "eyJmaWQiOjIwNDIsInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHg4MDJhODBFMTJFOTcyNjREODE0QTg0NEY5MTk4QjU4NDJFQjU5RTc4In0",
+    "payload": "eyJkb21haW4iOiJjb21wZXRlci5hcHAifQ",
+    "signature": "MHgzNWE0ODNiNGY4MDM0NGUxOTcyNGM0ZGE5MzgwYzUyOGI0OWFhNGQ4ZWUyZGQyZTAwMWFhOWI1NGFjNGNhMjdm"
+  },
   "frame": {
     "version": "1",
     "name": "Competer",
@@ -7,6 +12,20 @@
     "iconUrl": "/icon.png",
     "homeUrl": "/",
     "primaryCategory": "games",
-    "tags": ["contests", "onchain", "prizes", "competition", "base", "defi"]
-  }
+    "tags": ["contests", "onchain", "prizes", "competition", "base", "ethereum"],
+    "splashImageUrl": "/splash.png",
+    "splashBackgroundColor": "#1a1a1a",
+    "heroImageUrl": "/hero.png",
+    "tagline": "Compete. Win. Earn.",
+    "screenshotUrls": [
+      "/screenshot1.png",
+      "/screenshot2.png"
+    ]
+  },
+  "webhooks": [
+    {
+      "url": "/api/webhooks/farcaster",
+      "method": "POST"
+    }
+  ]
 }

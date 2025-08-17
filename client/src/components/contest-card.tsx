@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Users, DollarSign } from "lucide-react";
+import { Clock, Users, DollarSign, Share2 } from "lucide-react";
 import { Contest } from "@shared/schema";
+import { sdk } from "@farcaster/miniapp-sdk";
 
 interface ContestCardProps {
   contest: Contest & {
@@ -14,6 +15,38 @@ interface ContestCardProps {
 }
 
 export default function ContestCard({ contest, onJoin, featured = false, className = "" }: ContestCardProps) {
+  const handleShare = async () => {
+    try {
+      // Try Farcaster sharing first
+      if (typeof sdk !== 'undefined') {
+        try {
+          await sdk.actions.share({
+            url: `${window.location.origin}/contest/${contest.id}`,
+            text: `🏆 Check out this contest: ${contest.title}\n💰 Prize Pool: ${contest.prizePool} ETH\n🎯 ${contest.description}`
+          });
+          return;
+        } catch (farcasterError) {
+          console.log('⚠️ Farcaster share not available');
+        }
+      }
+      
+      // Fallback to Web Share API
+      if (navigator.share) {
+        await navigator.share({
+          title: `🏆 ${contest.title}`,
+          text: `Check out this contest! Prize Pool: ${contest.prizePool} ETH`,
+          url: `${window.location.origin}/contest/${contest.id}`
+        });
+      } else {
+        // Copy to clipboard fallback
+        const shareText = `🏆 ${contest.title}\n💰 Prize Pool: ${contest.prizePool} ETH\n${window.location.origin}/contest/${contest.id}`;
+        await navigator.clipboard.writeText(shareText);
+        alert('Contest link copied to clipboard!');
+      }
+    } catch (error) {
+      console.error('Failed to share:', error);
+    }
+  };
   const getStatusColor = (status: string) => {
     switch (status) {
       case "active":
@@ -96,15 +129,26 @@ export default function ContestCard({ contest, onJoin, featured = false, classNa
         </div>
       </div>
       
-      <Button
-        className={`w-full ${featured ? "gradient-secondary" : "btn-secondary"} transform hover:scale-105`}
-        onClick={() => onJoin?.(contest.id)}
-        disabled={contest.status === "completed" || contest.status === "cancelled"}
-        data-testid="contest-join-button"
-      >
-        {contest.status === "completed" ? "View Results" : 
-         contest.status === "draft" ? "Register for Contest" : "Join Contest"}
-      </Button>
+      <div className="flex gap-2">
+        <Button
+          className={`flex-1 ${featured ? "gradient-secondary" : "btn-secondary"} transform hover:scale-105`}
+          onClick={() => onJoin?.(contest.id)}
+          disabled={contest.status === "completed" || contest.status === "cancelled"}
+          data-testid="contest-join-button"
+        >
+          {contest.status === "completed" ? "View Results" : 
+           contest.status === "draft" ? "Register for Contest" : "Join Contest"}
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleShare}
+          className="px-3 hover:bg-accent hover:text-accent-foreground"
+          title="Share on Farcaster"
+        >
+          <Share2 size={16} />
+        </Button>
+      </div>
     </div>
   );
 

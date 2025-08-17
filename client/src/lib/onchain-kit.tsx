@@ -1,4 +1,5 @@
 import { ReactNode, createContext, useContext, useState } from 'react';
+import { sdk } from '@farcaster/miniapp-sdk';
 
 interface WalletContextType {
   address: string | null;
@@ -21,8 +22,24 @@ export function OnchainKitProvider({ children }: OnchainKitProviderProps) {
   const connect = async () => {
     setIsConnecting(true);
     try {
-      // Simulate wallet connection for demo purposes
-      // In production, this would integrate with actual wallet providers
+      // Try Farcaster authentication first
+      if (typeof sdk !== 'undefined') {
+        try {
+          const fid = await sdk.context.user.fid;
+          if (fid) {
+            // Generate a deterministic address based on FID for demo
+            // In production, you'd use proper Farcaster auth
+            const fidAddress = "0x" + fid.toString(16).padStart(40, '0');
+            setAddress(fidAddress);
+            console.log('🎯 Connected via Farcaster with FID:', fid);
+            return;
+          }
+        } catch (farcasterError) {
+          console.log('⚠️ Farcaster auth not available, using demo wallet');
+        }
+      }
+      
+      // Fallback to demo wallet for development
       const demoAddress = "0x" + Math.random().toString(16).substr(2, 40);
       setAddress(demoAddress);
     } catch (error) {
