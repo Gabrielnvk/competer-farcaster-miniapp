@@ -68,8 +68,6 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getContests(filters?: { status?: string; category?: string }): Promise<Contest[]> {
-    let query = db.select().from(contests);
-    
     const conditions = [];
     if (filters?.status) {
       conditions.push(eq(contests.status, filters.status as any));
@@ -79,10 +77,10 @@ export class DatabaseStorage implements IStorage {
     }
     
     if (conditions.length > 0) {
-      query = query.where(and(...conditions));
+      return await db.select().from(contests).where(and(...conditions)).orderBy(desc(contests.createdAt));
     }
     
-    return query.orderBy(desc(contests.createdAt));
+    return await db.select().from(contests).orderBy(desc(contests.createdAt));
   }
 
   async getContestById(id: string): Promise<Contest | undefined> {

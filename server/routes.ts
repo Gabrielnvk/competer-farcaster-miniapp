@@ -56,11 +56,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/contests", async (req, res) => {
     try {
-      const contestData = insertContestSchema.parse(req.body);
+      // Convert date strings to Date objects
+      const bodyWithDates = {
+        ...req.body,
+        startTime: new Date(req.body.startTime),
+        endTime: new Date(req.body.endTime),
+      };
+      
+      const contestData = insertContestSchema.parse(bodyWithDates);
       const contest = await storage.createContest(contestData);
       res.json(contest);
     } catch (error) {
-      res.status(400).json({ error: "Invalid contest data" });
+      if (error instanceof Error) {
+        return res.status(400).json({ 
+          error: "Invalid contest data", 
+          details: error.message 
+        });
+      }
+      res.status(400).json({ error: "Invalid contest data", details: "Unknown error" });
     }
   });
 

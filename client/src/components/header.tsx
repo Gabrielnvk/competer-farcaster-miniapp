@@ -33,17 +33,17 @@ export default function Header() {
             {/* Desktop Navigation */}
             <nav className="hidden md:flex space-x-6">
               {navItems.map((item) => (
-                <Link key={item.path} href={item.path}>
-                  <a
-                    className={`font-medium transition-colors ${
-                      location === item.path
-                        ? "text-white"
-                        : "text-gray-300 hover:text-accent"
-                    }`}
-                    data-testid={`nav-${item.label.toLowerCase().replace(" ", "-")}`}
-                  >
-                    {item.label}
-                  </a>
+                <Link 
+                  key={item.path} 
+                  href={item.path}
+                  className={`font-medium transition-colors ${
+                    location === item.path
+                      ? "text-white"
+                      : "text-gray-300 hover:text-accent"
+                  }`}
+                  data-testid={`nav-${item.label.toLowerCase().replace(" ", "-")}`}
+                >
+                  {item.label}
                 </Link>
               ))}
             </nav>
@@ -85,18 +85,18 @@ export default function Header() {
         <div className="md:hidden bg-primary border-t border-primary-light" data-testid="mobile-menu">
           <div className="px-4 py-2 space-y-1">
             {navItems.map((item) => (
-              <Link key={item.path} href={item.path}>
-                <a
-                  className={`block px-3 py-2 rounded-md font-medium transition-colors ${
-                    location === item.path
-                      ? "text-white bg-primary-light"
-                      : "text-gray-300 hover:text-accent hover:bg-primary-light"
-                  }`}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  data-testid={`mobile-nav-${item.label.toLowerCase().replace(" ", "-")}`}
-                >
-                  {item.label}
-                </a>
+              <Link 
+                key={item.path} 
+                href={item.path}
+                className={`block px-3 py-2 rounded-md font-medium transition-colors ${
+                  location === item.path
+                    ? "text-white bg-primary-light"
+                    : "text-gray-300 hover:text-accent hover:bg-primary-light"
+                }`}
+                onClick={() => setIsMobileMenuOpen(false)}
+                data-testid={`mobile-nav-${item.label.toLowerCase().replace(" ", "-")}`}
+              >
+                {item.label}
               </Link>
             ))}
           </div>

@@ -47,6 +47,7 @@ export default function ContestCreationForm({ onSuccess }: ContestCreationFormPr
       entryFee: "0",
       maxParticipants: 100,
       prizeType: "winner-takes-all",
+      duration: 7,
     },
   });
 
